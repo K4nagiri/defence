@@ -110,7 +110,7 @@ void AccountManager::AddAccount() {
             getline(cin, password);
 
             ofstream fout(AccountFile, ios::app);
-            fout << email << "," << password << endl;
+            fout << email << " " << password << endl;
             fout.close();
 
             cout << "Account added." << endl;
