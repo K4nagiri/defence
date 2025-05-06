@@ -1,6 +1,15 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+class Login{
+public:
+
+    bool VerifyLogin();
+    void ChangeLogin();
+
+};
+
+
 class AccountManager{
 public:
 

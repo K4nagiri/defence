@@ -6,12 +6,97 @@
 
 using namespace std;
 
-// Filenames for storing master password and credentials
+//Filenames for storing login
+const string LoginFile = "login.txt";
+
+bool Login::VerifyLogin(){
+    ifstream fin(LoginFile);
+    string LoginEmail;
+    string LoginPassword;
+
+    system("cls");
+
+    if (!fin) {
+        ofstream fout(LoginFile);
+        LoginEmail = "email.com";
+        LoginPassword = "password";
+        fout << "email.com" << endl;
+        fout << "password" << endl;
+        fout.close();
+    } else {
+        getline(fin, LoginEmail);
+        getline(fin, LoginPassword);
+        fin.close();
+    }
+
+
+
+    // Prompt user for email and password
+    string Email;
+    string Password;
+    cout << "Enter Email: ";
+    cin >> Email;
+    cout << "Enter Password: ";
+    cin >> Password;
+
+    // Check and respond accordingly
+    if (Email == LoginEmail && Password == LoginPassword) {
+        return true;
+    } else {
+        cout << "Access Denied." << endl;
+        Sleep(1200);
+        return false;
+    }
+}
+
+void Login::ChangeLogin(){
+
+    string option;
+    while (true) {
+        system("cls");
+        cout << "1. Enter new login email and password\n2. Go Back\nChoose: ";
+        cin>>option;
+
+        if (option == "2") {
+            system("cls");
+            return; // User wants to go back
+        } else if (option == "1") {
+            if (!VerifyLogin()) {
+                system("cls");
+                return;
+            }
+            cin.ignore();
+
+            string newEmail;
+            string newPassword;
+            cout << "\nEnter new Email: ";
+            getline(cin, newEmail);
+            cout << "Enter new Password: ";
+            getline(cin, newPassword);
+
+            ofstream fout(LoginFile);
+            fout << newEmail << endl;
+            fout << newPassword << endl;
+            fout.close();
+
+            system("cls");
+            cout << "Login email and password have been changed succesfully.\n";
+            Sleep(1200);
+            system("cls");
+            return;
+        } else {
+            cout << "Invalid option.\n";
+            Sleep(1200);
+        }
+    }
+}
+
+// Filenames for storing master password and accounts
 const string MasterFile = "master.txt";
 const string AccountFile = "account.txt";
 
 // Function to verify the master password
-bool AccountManager::VerifyMasterPassword() {
+bool AccountManager::VerifyMasterPassword(){
     ifstream fin(MasterFile);
     string savedPassword;
 
@@ -58,8 +143,6 @@ void AccountManager::ChangeMasterPassword() {
             system("cls");
             return; // User wants to go back
         } else if (option == "1") {
-
-
             if (!VerifyMasterPassword()) {
                 system("cls");
                 return;
@@ -67,7 +150,7 @@ void AccountManager::ChangeMasterPassword() {
             cin.ignore();
 
             string newPass;
-            cout << "Enter new master password: ";
+            cout << "\nEnter new master password: ";
             getline(cin, newPass);
 
             ofstream fout(MasterFile);
@@ -86,7 +169,7 @@ void AccountManager::ChangeMasterPassword() {
     }
 }
 
-// Function to add a new email-password credential
+// Function to add a new account
 void AccountManager::AddAccount() {
     string email, password;
     string option;
